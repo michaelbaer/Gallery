@@ -1,8 +1,8 @@
 import UIKit
-import Gallery
 import Lightbox
 import AVFoundation
 import AVKit
+import Gallery
 
 class ViewController: UIViewController, LightboxControllerDismissalDelegate, GalleryControllerDelegate {
 
@@ -32,6 +32,7 @@ class ViewController: UIViewController, LightboxControllerDismissalDelegate, Gal
 
   func buttonTouched(_ button: UIButton) {
     gallery = GalleryController()
+    gallery.pages = [GalleryController.Page.images, GalleryController.Page.camera]
     gallery.delegate = self
 
     present(gallery, animated: true, completion: nil)

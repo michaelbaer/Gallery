@@ -9,23 +9,27 @@ public protocol GalleryControllerDelegate: class {
   func galleryControllerDidCancel(_ controller: GalleryController)
 }
 
-public class GalleryController: UIViewController, PermissionControllerDelegate {
+open class GalleryController: UIViewController, PermissionControllerDelegate {
 
   lazy var imagesController: ImagesController = self.makeImagesController()
   lazy var cameraController: CameraController = self.makeCameraController()
   lazy var videosController: VideosController = self.makeVideosController()
 
-  enum Page: Int {
+  public enum Page: Int {
     case images, camera, videos
   }
+    
+    open var pages: Set<Page>= [Page.images, Page.camera, Page.videos]
 
   lazy var pagesController: PagesController = self.makePagesController()
   lazy var permissionController: PermissionController = self.makePermissionController()
   public weak var delegate: GalleryControllerDelegate?
+    
+    
 
   // MARK: - Life cycle
 
-  public override func viewDidLoad() {
+  open override func viewDidLoad() {
     super.viewDidLoad()
 
     setup()
@@ -41,7 +45,7 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
     Cart.shared.reset()
   }
 
-  public override var prefersStatusBarHidden : Bool {
+  open override var prefersStatusBarHidden : Bool {
     return true
   }
 
@@ -85,7 +89,17 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
   }
 
   func makePagesController() -> PagesController {
-    let controller = PagesController(controllers: [imagesController, cameraController, videosController])
+    var pageVCs = [UIViewController]()
+    
+    pages.forEach { [unowned self] (page) in
+        switch page {
+        case .images: pageVCs.append(self.imagesController)
+        case .camera: pageVCs.append(self.cameraController)
+        case .videos: pageVCs.append(self.videosController)
+        }
+    }
+    
+    let controller = PagesController(controllers: pageVCs)
     controller.selectedIndex = Page.camera.rawValue
 
     return controller
@@ -132,4 +146,5 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
     showMain()
     permissionController.g_removeFromParentController()
   }
+
 }
