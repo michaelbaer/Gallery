@@ -15,6 +15,14 @@ class ViewController: UIViewController, LightboxControllerDismissalDelegate, Gal
     view.backgroundColor = UIColor.white
 
     Gallery.Config.VideoEditor.savesEditedVideoToLibrary = true
+    Gallery.Config.Grid.TopView.backgroundColor = UIColor.yellow
+    Gallery.Config.Grid.TopView.height = 64
+    Gallery.Config.Grid.CloseButton.type = .system
+    Gallery.Config.Grid.useNavigationBar = true
+    Gallery.Config.Grid.NavigationBar.CloseBarButton.title = "Schließen"
+    
+    Gallery.Config.Grid.CloseButton.pinVertically = .bottom
+    Gallery.Config.Grid.ArrowButton.pinVertically = .bottom
 
     button = UIButton(type: .system)
     button.frame.size = CGSize(width: 200, height: 50)
@@ -31,8 +39,9 @@ class ViewController: UIViewController, LightboxControllerDismissalDelegate, Gal
   }
 
   func buttonTouched(_ button: UIButton) {
-    gallery = GalleryController()
+    gallery = DemoGalleryViewController()
     gallery.pages = [GalleryController.Page.images, GalleryController.Page.camera]
+    gallery.firstShownPage = .images
     gallery.delegate = self
 
     present(gallery, animated: true, completion: nil)

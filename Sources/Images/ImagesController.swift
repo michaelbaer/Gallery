@@ -47,6 +47,8 @@ class ImagesController: UIViewController {
     stackView.g_pin(size: CGSize(width: 56, height: 56))
 
     gridView.closeButton.addTarget(self, action: #selector(closeButtonTouched(_:)), for: .touchUpInside)
+    gridView.closeBarButton.target = self
+    gridView.closeBarButton.action = #selector(closeButtonTouched(_:))
     gridView.doneButton.addTarget(self, action: #selector(doneButtonTouched(_:)), for: .touchUpInside)
     gridView.arrowButton.addTarget(self, action: #selector(arrowButtonTouched(_:)), for: .touchUpInside)
     stackView.addTarget(self, action: #selector(stackViewTouched(_:)), for: .touchUpInside)

@@ -20,6 +20,7 @@ open class GalleryController: UIViewController, PermissionControllerDelegate {
   }
     
     open var pages: Set<Page>= [Page.images, Page.camera, Page.videos]
+    open var firstShownPage: Page = Page.camera
 
   lazy var pagesController: PagesController = self.makePagesController()
   lazy var permissionController: PermissionController = self.makePermissionController()
@@ -100,7 +101,7 @@ open class GalleryController: UIViewController, PermissionControllerDelegate {
     }
     
     let controller = PagesController(controllers: pageVCs)
-    controller.selectedIndex = Page.camera.rawValue
+    controller.selectedIndex = firstShownPage.rawValue
 
     return controller
   }

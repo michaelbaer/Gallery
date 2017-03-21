@@ -26,6 +26,17 @@ public struct Config {
   }
 
   public struct Grid {
+    
+    public static var useNavigationBar: Bool = false
+    
+    public struct NavigationBar {
+        public static var tintColor: UIColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 1)
+        
+        public struct CloseBarButton {
+            public static var systemItem: UIBarButtonSystemItem = .cancel
+            public static var title: String? = ""
+        }
+    }
 
     public struct CloseButton {
       public static var tintColor: UIColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 1)
@@ -43,6 +54,11 @@ public struct Config {
     struct Dimension {
       static let columnCount: CGFloat = 4
       static let cellSpacing: CGFloat = 2
+    }
+    
+    public struct TopView {
+        public static var backgroundColor: UIColor = UIColor.white
+        public static var height: CGFloat = 40.0
     }
   }
 

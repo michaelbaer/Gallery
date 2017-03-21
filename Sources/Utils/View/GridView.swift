@@ -11,6 +11,8 @@ class GridView: UIView {
   lazy var arrowButton: ArrowButton = self.makeArrowButton()
   lazy var collectionView: UICollectionView = self.makeCollectionView()
   lazy var closeButton: UIButton = self.makeCloseButton()
+    lazy var closeBarButton: UIBarButtonItem = self.makeCloseBarButton()
+    lazy var navigationItem: UINavigationItem = self.makeNavigationItem()
   lazy var doneButton: UIButton = self.makeDoneButton()
   lazy var emptyView: UIView = self.makeEmptyView()
 
@@ -35,16 +37,28 @@ class GridView: UIView {
       addSubview($0)
     }
 
-    [closeButton, arrowButton].forEach {
-      topView.addSubview($0)
+    switch Config.Grid.useNavigationBar {
+    case true:
+        (topView as? UINavigationBar)?.pushItem(navigationItem, animated: false)
+        arrowButton.g_pin(height: 40)
+    case false:
+        [closeButton, arrowButton].forEach {
+            topView.addSubview($0)
+        }
+        closeButton.g_pin(on: .top)
+        closeButton.g_pin(on: .left)
+        closeButton.g_pin(size: CGSize(width: 40, height: 40))
+        
+        arrowButton.g_pinCenter()
+        arrowButton.g_pin(height: 40)
     }
-
+    
     [bottomBlurView, doneButton].forEach {
       bottomView.addSubview($0 as! UIView)
     }
 
     topView.g_pinUpward()
-    topView.g_pin(height: 40)
+    topView.g_pin(height: Config.Grid.TopView.height)
     bottomView.g_pinDownward()
     bottomView.g_pin(height: 80)
 
@@ -56,13 +70,6 @@ class GridView: UIView {
 
     bottomBlurView.g_pinEdges()
 
-    closeButton.g_pin(on: .top)
-    closeButton.g_pin(on: .left)
-    closeButton.g_pin(size: CGSize(width: 40, height: 40))
-
-    arrowButton.g_pinCenter()
-    arrowButton.g_pin(height: 40)
-
     doneButton.g_pin(on: .centerY)
     doneButton.g_pin(on: .right, constant: -38)
   }
@@ -70,10 +77,16 @@ class GridView: UIView {
   // MARK: - Controls
 
   func makeTopView() -> UIView {
-    let view = UIView()
-    view.backgroundColor = UIColor.white
-
-    return view
+    switch Config.Grid.useNavigationBar {
+    case true:
+        let bar = UINavigationBar()
+        return bar
+    case false:
+        let view = UIView()
+        view.backgroundColor = Config.Grid.TopView.backgroundColor
+        return view
+    }
+    
   }
 
   func makeBottomView() -> UIView {
@@ -108,6 +121,22 @@ class GridView: UIView {
 
     return button
   }
+    
+    func makeNavigationItem() -> UINavigationItem {
+        let navItem = UINavigationItem(title: "")
+        navItem.leftBarButtonItem = closeBarButton
+        navItem.titleView = arrowButton
+        return navItem
+    }
+    
+    func makeCloseBarButton() -> UIBarButtonItem {
+        if let title = Config.Grid.NavigationBar.CloseBarButton.title {
+            return UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+        } else {
+            return UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: nil)
+        }
+        
+    }
 
   func makeDoneButton() -> UIButton {
     let button = UIButton(type: .system)
