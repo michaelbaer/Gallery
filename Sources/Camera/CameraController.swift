@@ -36,8 +36,12 @@ class CameraController: UIViewController {
     cameraView.g_pinEdges()
 
     cameraView.closeButton.addTarget(self, action: #selector(closeButtonTouched(_:)), for: .touchUpInside)
+    cameraView.closeBarButton.target = self
+    cameraView.closeBarButton.action = #selector(closeButtonTouched(_:))
     cameraView.flashButton.addTarget(self, action: #selector(flashButtonTouched(_:)), for: .touchUpInside)
     cameraView.rotateButton.addTarget(self, action: #selector(rotateButtonTouched(_:)), for: .touchUpInside)
+    cameraView.rotateBarButton.target = self
+    cameraView.rotateBarButton.action = #selector(rotateButtonTouched(_:))
     cameraView.stackView.addTarget(self, action: #selector(stackViewTouched(_:)), for: .touchUpInside)
     cameraView.shutterButton.addTarget(self, action: #selector(shutterButtonTouched(_:)), for: .touchUpInside)
     cameraView.doneButton.addTarget(self, action: #selector(doneButtonTouched(_:)), for: .touchUpInside)
