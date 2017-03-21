@@ -20,6 +20,11 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
   lazy var rotateOverlayView: UIView = self.makeRotateOverlayView()
   lazy var shutterOverlayView: UIView = self.makeShutterOverlayView()
   lazy var blurView: UIVisualEffectView = self.makeBlurView()
+    
+    lazy var navigationBar: UINavigationBar = self.makeNavigationBar()
+    lazy var navigationItem: UINavigationItem = self.makeNavigationItem()
+    lazy var closeBarButton: UIBarButtonItem = self.makeCloseBarButton()
+    lazy var rotateBarButton: UIBarButtonItem = self.makeRotateBarButton()
 
   var timer: Timer?
   var previewLayer: AVCaptureVideoPreviewLayer?
@@ -43,8 +48,39 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
   func setup() {
     addGestureRecognizer(tapGR)
 
-    [closeButton, flashButton, rotateButton, bottomContainer].forEach {
-      addSubview($0)
+    switch Config.Camera.showNavigationBar {
+    case true:
+        [navigationBar, bottomContainer].forEach {
+            addSubview($0)
+        }
+        navigationBar.pushItem(navigationItem, animated: false)
+        navigationBar.g_pinUpward()
+        navigationBar.g_pin(height: Config.Camera.NavigationBar.height)
+        
+        flashButton.g_pin(size: CGSize(width: 60, height: 44))
+        
+        
+        
+    case false:
+        [closeButton, flashButton, rotateButton, bottomContainer].forEach {
+            addSubview($0)
+        }
+        
+        [closeButton, flashButton, rotateButton].forEach {
+            $0.g_addShadow()
+        }
+        
+        closeButton.g_pin(on: .top)
+        closeButton.g_pin(on: .left)
+        closeButton.g_pin(size: CGSize(width: 44, height: 44))
+        
+        flashButton.g_pin(on: .centerY, view: closeButton)
+        flashButton.g_pin(on: .centerX)
+        flashButton.g_pin(size: CGSize(width: 60, height: 44))
+        
+        rotateButton.g_pin(on: .top)
+        rotateButton.g_pin(on: .right)
+        rotateButton.g_pin(size: CGSize(width: 44, height: 44))
     }
 
     [bottomView, shutterButton].forEach {
@@ -55,26 +91,16 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
       bottomView.addSubview($0 as! UIView)
     }
 
-    [closeButton, flashButton, rotateButton].forEach {
-      $0.g_addShadow()
-    }
-
+    
     rotateOverlayView.addSubview(blurView)
-    insertSubview(rotateOverlayView, belowSubview: rotateButton)
+    switch Config.Camera.showNavigationBar {
+    case true:
+        insertSubview(rotateOverlayView, belowSubview: navigationBar)
+    case false:
+        insertSubview(rotateOverlayView, belowSubview: rotateButton)
+    }
     insertSubview(focusImageView, belowSubview: bottomContainer)
     insertSubview(shutterOverlayView, belowSubview: bottomContainer)
-
-    closeButton.g_pin(on: .top)
-    closeButton.g_pin(on: .left)
-    closeButton.g_pin(size: CGSize(width: 44, height: 44))
-
-    flashButton.g_pin(on: .centerY, view: closeButton)
-    flashButton.g_pin(on: .centerX)
-    flashButton.g_pin(size: CGSize(width: 60, height: 44))
-
-    rotateButton.g_pin(on: .top)
-    rotateButton.g_pin(on: .right)
-    rotateButton.g_pin(size: CGSize(width: 44, height: 44))
 
     bottomContainer.g_pinDownward()
     bottomContainer.g_pin(height: 80)
@@ -249,5 +275,43 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
 
     return blurView
   }
+    
+    func makeNavigationBar() -> UINavigationBar {
+        let bar = UINavigationBar()
+        bar.tintColor = Config.Camera.NavigationBar.tintColor
+        
+        if Config.Camera.NavigationBar.isTransparent {
+            bar.setBackgroundImage(UIImage(), for: .default)
+            bar.shadowImage = UIImage()
+            bar.isTranslucent = true
+        } else {
+            bar.backgroundColor = Config.Camera.NavigationBar.backgroundColor
+        }
+        
+        return bar
+    }
+    
+    func makeNavigationItem() -> UINavigationItem {
+        let navItem = UINavigationItem(title: "")
+        navItem.leftBarButtonItem = closeBarButton
+        navItem.titleView = flashButton
+        navItem.rightBarButtonItem = rotateBarButton
+        return navItem
+    }
+    
+    func makeCloseBarButton() -> UIBarButtonItem {
+        if let title = Config.Camera.NavigationBar.CloseBarButton.title {
+            return UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+        } else {
+            return UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: nil)
+        }
+        
+    }
+    
+    func makeRotateBarButton() -> UIBarButtonItem {
+        let image = Bundle.image("gallery_camera_rotate")
+        let rotateBtn = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
+        return rotateBtn
+    }
 
 }

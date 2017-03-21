@@ -11,6 +11,7 @@ public struct Config {
   public struct Camera {
 
     public static var recordLocation: Bool = false
+    public static var showNavigationBar: Bool = false
 
     public struct ShutterButton {
       public static var numberColor: UIColor = UIColor(red: 54/255, green: 56/255, blue: 62/255, alpha: 1)
@@ -22,6 +23,18 @@ public struct Config {
 
     public struct StackView {
       public static let imageCount: Int = 4
+    }
+    
+    public struct NavigationBar {
+        public static var height: CGFloat = 40.0
+        public static var backgroundColor: UIColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 1)
+        public static var tintColor: UIColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 1)
+        public static var isTransparent: Bool = true
+        
+        public struct CloseBarButton {
+            public static var systemItem: UIBarButtonSystemItem = .cancel
+            public static var title: String? = ""
+        }
     }
   }
 
