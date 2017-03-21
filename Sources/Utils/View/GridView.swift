@@ -37,7 +37,7 @@ class GridView: UIView {
       addSubview($0)
     }
 
-    switch Config.Grid.useNavigationBar {
+    switch Config.Grid.TopView.isNavigationBar {
     case true:
         (topView as? UINavigationBar)?.pushItem(navigationItem, animated: false)
         arrowButton.g_pin(height: 40)
@@ -78,7 +78,7 @@ class GridView: UIView {
 
   func makeTopView() -> UIView {
     let view: UIView
-    switch Config.Grid.useNavigationBar {
+    switch Config.Grid.TopView.isNavigationBar {
     case true:
         let bar = UINavigationBar()
         bar.tintColor = Config.Grid.NavigationBar.tintColor

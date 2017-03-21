@@ -27,8 +27,6 @@ public struct Config {
 
   public struct Grid {
     
-    public static var useNavigationBar: Bool = false
-    
     public struct NavigationBar {
         public static var tintColor: UIColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 1)
         
@@ -57,6 +55,7 @@ public struct Config {
     }
     
     public struct TopView {
+        public static var isNavigationBar: Bool = false
         public static var backgroundColor: UIColor = UIColor.white
         public static var height: CGFloat = 40.0
     }
