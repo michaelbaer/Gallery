@@ -77,16 +77,17 @@ class GridView: UIView {
   // MARK: - Controls
 
   func makeTopView() -> UIView {
+    let view: UIView
     switch Config.Grid.useNavigationBar {
     case true:
         let bar = UINavigationBar()
-        return bar
+        bar.tintColor = Config.Grid.NavigationBar.tintColor
+        view = bar
     case false:
-        let view = UIView()
-        view.backgroundColor = Config.Grid.TopView.backgroundColor
-        return view
+        view = UIView()
     }
-    
+    view.backgroundColor = Config.Grid.TopView.backgroundColor
+    return view
   }
 
   func makeBottomView() -> UIView {

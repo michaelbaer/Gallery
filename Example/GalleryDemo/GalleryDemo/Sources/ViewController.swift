@@ -16,9 +16,11 @@ class ViewController: UIViewController, LightboxControllerDismissalDelegate, Gal
 
     Gallery.Config.VideoEditor.savesEditedVideoToLibrary = true
     Gallery.Config.Grid.TopView.backgroundColor = UIColor.yellow
-    Gallery.Config.Grid.TopView.height = 64
+    Gallery.Config.Grid.TopView.height += UIApplication.shared.statusBarFrame.height
     Gallery.Config.Grid.useNavigationBar = true
     Gallery.Config.Grid.NavigationBar.CloseBarButton.title = "Schließen"
+    Gallery.Config.Grid.NavigationBar.tintColor = UIColor.red
+    Gallery.Config.Grid.ArrowButton.tintColor = UIColor.red
 
     button = UIButton(type: .system)
     button.frame.size = CGSize(width: 200, height: 50)
