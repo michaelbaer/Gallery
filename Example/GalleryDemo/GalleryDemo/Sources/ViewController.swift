@@ -27,6 +27,9 @@ class ViewController: UIViewController, LightboxControllerDismissalDelegate, Gal
     Gallery.Config.Camera.NavigationBar.CloseBarButton.title = "Schließen"
     Gallery.Config.Camera.NavigationBar.backgroundColor = UIColor(red: 109/255, green: 107/255, blue: 132/255, alpha: 0)
     Gallery.Config.Camera.NavigationBar.tintColor = UIColor.red
+    
+    Gallery.Config.Grid.FrameView.borderColor = UIColor.blue
+    Gallery.Config.Grid.FrameView.fillColor = UIColor.red
 
     button = UIButton(type: .system)
     button.frame.size = CGSize(width: 200, height: 50)

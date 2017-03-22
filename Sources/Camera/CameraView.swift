@@ -1,6 +1,21 @@
 import UIKit
 import AVFoundation
 
+extension UIDeviceOrientation {
+    
+    func toAVCaptureVideoOrientation() -> AVCaptureVideoOrientation {
+        switch self {
+        case .landscapeLeft: return AVCaptureVideoOrientation.landscapeLeft
+        case .landscapeRight: return AVCaptureVideoOrientation.landscapeRight
+        case .portrait: return AVCaptureVideoOrientation.portrait
+        case .portraitUpsideDown: return AVCaptureVideoOrientation.portraitUpsideDown
+        case .unknown: fallthrough
+        case .faceUp: fallthrough
+        case .faceDown: return AVCaptureVideoOrientation.portrait
+        }
+    }
+}
+
 protocol CameraViewDelegate: class {
   func cameraView(_ cameraView: CameraView, didTouch point: CGPoint)
 }
@@ -42,7 +57,7 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+    
   // MARK: - Setup
 
   func setup() {
@@ -131,8 +146,19 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
     self.layer.insertSublayer(layer!, at: 0)
     layer?.frame = self.layer.bounds
 
+    if (layer?.connection.isVideoOrientationSupported)! {
+        layer?.connection.videoOrientation = .landscapeLeft
+    }
+    
     previewLayer = layer
   }
+    
+    func updateVideoOrientation(from orientation: UIDeviceOrientation) {
+        guard let previewLayer = previewLayer, previewLayer.connection.isVideoOrientationSupported == true else {
+            return
+        }
+        previewLayer.connection.videoOrientation = orientation.toAVCaptureVideoOrientation()
+    }
 
   // MARK: - Action
 
