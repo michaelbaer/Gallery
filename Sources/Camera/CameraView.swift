@@ -14,6 +14,19 @@ extension UIDeviceOrientation {
         case .faceDown: return AVCaptureVideoOrientation.portrait
         }
     }
+    
+    func toRotatedDeviceOrientation() -> UIDeviceOrientation {
+        
+        let orientation: UIDeviceOrientation
+        switch self {
+        case .landscapeLeft: orientation = .landscapeRight
+        case .landscapeRight: orientation = .landscapeLeft
+        case .portrait: orientation = .portrait
+        case .portraitUpsideDown: orientation = .portraitUpsideDown
+        default: orientation = .portrait
+        }
+        return orientation
+    }
 }
 
 protocol CameraViewDelegate: class {
@@ -147,7 +160,7 @@ class CameraView: UIView, UIGestureRecognizerDelegate {
     layer?.frame = self.layer.bounds
 
     if (layer?.connection.isVideoOrientationSupported)! {
-        layer?.connection.videoOrientation = .landscapeLeft
+        layer?.connection.videoOrientation = UIDevice.current.orientation.toRotatedDeviceOrientation().toAVCaptureVideoOrientation()
     }
     
     previewLayer = layer

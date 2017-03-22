@@ -3,7 +3,7 @@ import Photos
 
 public class Image: Equatable {
 
-  let asset: PHAsset
+  public let asset: PHAsset
 
   // MARK: - Initialization
   

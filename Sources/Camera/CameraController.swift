@@ -32,24 +32,9 @@ class CameraController: UIViewController {
     locationManager?.stop()
   }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        cameraView.updateVideoOrientation(from: UIDevice.current.orientation)
-    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
-        let orientation: UIDeviceOrientation
-        switch UIDevice.current.orientation {
-        case .landscapeLeft: orientation = .landscapeRight
-        case .landscapeRight: orientation = .landscapeLeft
-        case .portrait: orientation = .portrait
-        case .portraitUpsideDown: orientation = .portraitUpsideDown
-        default: orientation = .portrait
-        }
-        
-        cameraView.updateVideoOrientation(from: orientation)
+        cameraView.updateVideoOrientation(from: UIDevice.current.orientation.toRotatedDeviceOrientation())
     }
 
   // MARK: - Setup
